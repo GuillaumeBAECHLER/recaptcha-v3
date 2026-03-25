@@ -100,43 +100,9 @@
       color: #111827;
     }
 
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 12px 28px;
-      border: none;
-      border-radius: 10px;
-      background: #4f46e5;
-      color: #fff;
-      font-size: 0.95rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-
-    .btn:hover {
-      background: #4338ca;
-    }
-
-    .btn:disabled {
-      background: #9ca3af;
-      cursor: not-allowed;
-    }
-
-    .spinner {
-      width: 18px;
-      height: 18px;
-      border: 2.5px solid rgba(255, 255, 255, 0.3);
-      border-top-color: #fff;
-      border-radius: 50%;
-      animation: spin 0.6s linear infinite;
-    }
-
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
-      }
+    .loading {
+      font-size: 0.9rem;
+      color: #6b7280;
     }
 
     .error-msg {
@@ -171,10 +137,7 @@
 
     <p class="error-msg hidden" id="error"></p>
 
-    <button class="btn" id="refreshBtn" disabled>
-      <span class="spinner" id="spinner"></span>
-      Checking…
-    </button>
+    <p class="loading" id="loading">Checking…</p>
   </div>
 
   <script>
@@ -184,8 +147,7 @@
     const scoreValue = document.getElementById("scoreValue");
     const details = document.getElementById("details");
     const errorEl = document.getElementById("error");
-    const btn = document.getElementById("refreshBtn");
-    const spinner = document.getElementById("spinner");
+    const loadingEl = document.getElementById("loading");
 
     function setScore(score) {
       const offset = CIRCUMFERENCE * (1 - score);
@@ -219,9 +181,7 @@
     }
 
     function setLoading(loading) {
-      btn.disabled = loading;
-      spinner.classList.toggle("hidden", !loading);
-      btn.lastChild.textContent = loading ? " Checking…" : " Refresh Score";
+      loadingEl.classList.toggle("hidden", !loading);
     }
 
     async function checkScore(siteKey) {
@@ -272,8 +232,6 @@
           grecaptcha.ready(() => checkScore(siteKey));
         };
         document.head.appendChild(script);
-
-        btn.addEventListener("click", () => checkScore(siteKey));
       } catch (err) {
         showError("Failed to load configuration");
         console.error(err);
