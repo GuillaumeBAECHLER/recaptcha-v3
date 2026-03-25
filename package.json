@@ -1,0 +1,7 @@
+{
+  "name": "recaptcha-v3-score",
+  "version": "1.0.0",
+  "description": "Displays your reCAPTCHA v3 score — Vercel-hosted with a serverless verification endpoint",
+  "private": true,
+  "license": "MIT"
+}
