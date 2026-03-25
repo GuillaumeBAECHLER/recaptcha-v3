@@ -3,5 +3,6 @@
   "version": "1.0.0",
   "description": "Displays your reCAPTCHA v3 score",
   "private": true,
+  "type": "module",
   "license": "MIT"
 }
