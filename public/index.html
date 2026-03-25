@@ -177,9 +177,7 @@
     </button>
   </div>
 
-  <script src="https://www.google.com/recaptcha/api.js?render=YOUR_RECAPTCHA_SITE_KEY"></script>
   <script>
-    const SITE_KEY = "YOUR_RECAPTCHA_SITE_KEY";
     const CIRCUMFERENCE = 2 * Math.PI * 65; // matches r=65 on the SVG circle
 
     const ring = document.getElementById("ring");
@@ -226,12 +224,12 @@
       btn.lastChild.textContent = loading ? " Checking…" : " Refresh Score";
     }
 
-    async function checkScore() {
+    async function checkScore(siteKey) {
       errorEl.classList.add("hidden");
       setLoading(true);
 
       try {
-        const token = await grecaptcha.execute(SITE_KEY, {
+        const token = await grecaptcha.execute(siteKey, {
           action: "score_check",
         });
 
@@ -258,9 +256,31 @@
       }
     }
 
-    btn.addEventListener("click", checkScore);
+    async function init() {
+      try {
+        const res = await fetch("/api/config");
+        const { siteKey } = await res.json();
 
-    grecaptcha.ready(checkScore);
+        if (!siteKey) {
+          showError("Site key not configured on the server");
+          return;
+        }
+
+        const script = document.createElement("script");
+        script.src = `https://www.google.com/recaptcha/api.js?render=${siteKey}`;
+        script.onload = () => {
+          grecaptcha.ready(() => checkScore(siteKey));
+        };
+        document.head.appendChild(script);
+
+        btn.addEventListener("click", () => checkScore(siteKey));
+      } catch (err) {
+        showError("Failed to load configuration");
+        console.error(err);
+      }
+    }
+
+    init();
   </script>
 </body>
 </html>

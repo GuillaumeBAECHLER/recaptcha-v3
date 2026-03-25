@@ -15,16 +15,13 @@ A minimal Vercel-hosted website that shows your browser's [reCAPTCHA v3](https:/
 
 Go to [Google reCAPTCHA Admin](https://www.google.com/recaptcha/admin) and create a **v3** site. You'll get a **site key** and a **secret key**.
 
-### 2. Add your site key
+### 2. Deploy to Vercel
 
-In `public/index.html`, replace every occurrence of `YOUR_RECAPTCHA_SITE_KEY` with your actual site key (there are two: one in the `<script>` tag URL, one in the JS constant).
-
-### 3. Deploy to Vercel
-
-Push this repo to GitHub, then import it in [Vercel](https://vercel.com). In your Vercel project settings, add an environment variable:
+Push this repo to GitHub, then import it in [Vercel](https://vercel.com). In your Vercel project settings, add two environment variables:
 
 | Name | Value |
 |------|-------|
+| `RECAPTCHA_SITE_KEY` | Your reCAPTCHA site key (public) |
 | `RECAPTCHA_SECRET_KEY` | Your reCAPTCHA secret key |
 
 Vercel automatically serves `public/` as static files and `api/` as serverless functions.
