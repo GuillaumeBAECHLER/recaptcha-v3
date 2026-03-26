@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>reCAPTCHA v3 Score Checker</title>
+  <title>reCAPTCHA v3 Test Website</title>
   <style>
     *,
     *::before,
@@ -18,10 +18,78 @@
         Helvetica, Arial, sans-serif;
       min-height: 100vh;
       display: flex;
-      align-items: center;
-      justify-content: center;
+      flex-direction: column;
       background: #f0f2f5;
       color: #1a1a2e;
+    }
+
+    .score-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: #fff;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      min-height: 52px;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+    }
+
+    .score-header-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-right: 4px;
+    }
+
+    .score-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      background: #f3f4f6;
+      border: 1px solid #e5e7eb;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .score-pill .action-name {
+      color: #374151;
+    }
+
+    .score-pill .score-value {
+      font-variant-numeric: tabular-nums;
+    }
+
+    .score-pill.green { border-color: #bbf7d0; background: #f0fdf4; }
+    .score-pill.green .score-value { color: #16a34a; }
+
+    .score-pill.yellow { border-color: #fef08a; background: #fefce8; }
+    .score-pill.yellow .score-value { color: #ca8a04; }
+
+    .score-pill.red { border-color: #fecaca; background: #fef2f2; }
+    .score-pill.red .score-value { color: #dc2626; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 16px 32px;
     }
 
     .card {
@@ -34,75 +102,86 @@
       text-align: center;
     }
 
-    h1 {
+    .card h1 {
       font-size: 1.5rem;
       font-weight: 700;
       margin-bottom: 8px;
     }
 
-    .subtitle {
+    .card p.subtitle {
       font-size: 0.95rem;
       color: #6b7280;
       margin-bottom: 32px;
+      line-height: 1.5;
     }
 
-    .score-ring {
-      position: relative;
-      width: 160px;
-      height: 160px;
-      margin: 0 auto 24px;
-    }
-
-    .score-ring svg {
-      transform: rotate(-90deg);
-    }
-
-    .score-ring .bg {
-      fill: none;
-      stroke: #e5e7eb;
-      stroke-width: 10;
-    }
-
-    .score-ring .fg {
-      fill: none;
-      stroke-width: 10;
-      stroke-linecap: round;
-      stroke-dasharray: 408;
-      stroke-dashoffset: 408;
-      transition: stroke-dashoffset 0.8s ease, stroke 0.4s ease;
-    }
-
-    .score-value {
-      position: absolute;
-      inset: 0;
-      display: flex;
+    .btn {
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      font-size: 2.5rem;
-      font-weight: 800;
-      font-variant-numeric: tabular-nums;
-    }
-
-    .details {
-      text-align: left;
-      background: #f9fafb;
+      padding: 12px 32px;
+      border: none;
       border-radius: 10px;
-      padding: 16px 20px;
-      margin-bottom: 24px;
-      font-size: 0.875rem;
-      line-height: 1.8;
-      color: #374151;
-    }
-
-    .details span {
-      float: right;
+      font-size: 0.95rem;
       font-weight: 600;
-      color: #111827;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      width: 100%;
     }
 
-    .loading {
-      font-size: 0.9rem;
-      color: #6b7280;
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .btn-primary {
+      background: #4f46e5;
+      color: #fff;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: #4338ca;
+    }
+
+    .form-group {
+      text-align: left;
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 6px;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+    }
+
+    .form-group input:focus {
+      border-color: #4f46e5;
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+    }
+
+    .screen {
+      display: none;
+    }
+
+    .screen.active {
+      display: block;
     }
 
     .error-msg {
@@ -114,129 +193,198 @@
     .hidden {
       display: none;
     }
+
+    .score-header-empty {
+      font-size: 0.8rem;
+      color: #9ca3af;
+      font-style: italic;
+    }
   </style>
 </head>
 <body>
-  <div class="card">
-    <h1>reCAPTCHA v3 Score</h1>
-    <p class="subtitle">See how Google rates this browser session</p>
+  <header class="score-header" data-test-id="score-header">
+    <span class="score-header-label">Scores</span>
+    <span class="score-header-empty" id="emptyLabel">Waiting for first check&hellip;</span>
+    <div id="scorePills"></div>
+  </header>
 
-    <div class="score-ring">
-      <svg width="160" height="160" viewBox="0 0 160 160">
-        <circle class="bg" cx="80" cy="80" r="65" />
-        <circle class="fg" id="ring" cx="80" cy="80" r="65" />
-      </svg>
-      <div class="score-value" id="scoreValue">—</div>
+  <main class="main">
+    <div id="consentScreen" class="screen active">
+      <div class="card">
+        <h1>Welcome</h1>
+        <p class="subtitle">You are about to enter this website</p>
+        <p class="error-msg hidden" id="consentError"></p>
+        <button
+          class="btn btn-primary"
+          data-test-id="got-it-button"
+          id="gotItBtn"
+        >
+          Got it
+        </button>
+      </div>
     </div>
 
-    <div class="details hidden" id="details">
-      <div>Action <span id="detailAction">—</span></div>
-      <div>Success <span id="detailSuccess">—</span></div>
-      <div>Timestamp <span id="detailTs">—</span></div>
+    <div id="loginScreen" class="screen">
+      <div class="card">
+        <h1>Log in</h1>
+        <p class="subtitle">Enter your credentials to continue</p>
+        <p class="error-msg hidden" id="loginError"></p>
+        <form id="loginForm" autocomplete="off">
+          <div class="form-group">
+            <label for="nameInput">Name</label>
+            <input
+              type="text"
+              id="nameInput"
+              data-test-id="name-input"
+              placeholder="Your name"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="emailInput">Email</label>
+            <input
+              type="email"
+              id="emailInput"
+              data-test-id="email-input"
+              placeholder="you@example.com"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="passwordInput">Password</label>
+            <input
+              type="password"
+              id="passwordInput"
+              data-test-id="password-input"
+              placeholder="Password"
+              required
+            />
+          </div>
+          <button
+            type="submit"
+            class="btn btn-primary"
+            data-test-id="login-button"
+            id="loginBtn"
+          >
+            Login
+          </button>
+        </form>
+      </div>
     </div>
-
-    <p class="error-msg hidden" id="error"></p>
-
-    <p class="loading" id="loading">Checking…</p>
-  </div>
+  </main>
 
   <script>
-    const CIRCUMFERENCE = 2 * Math.PI * 65; // matches r=65 on the SVG circle
+    let siteKey = null;
 
-    const ring = document.getElementById("ring");
-    const scoreValue = document.getElementById("scoreValue");
-    const details = document.getElementById("details");
-    const errorEl = document.getElementById("error");
-    const loadingEl = document.getElementById("loading");
-
-    function setScore(score) {
-      const offset = CIRCUMFERENCE * (1 - score);
-      ring.style.strokeDasharray = CIRCUMFERENCE;
-      ring.style.strokeDashoffset = offset;
-
-      let color;
-      if (score >= 0.7) color = "#16a34a";
-      else if (score >= 0.3) color = "#ca8a04";
-      else color = "#dc2626";
-
-      ring.style.stroke = color;
-      scoreValue.textContent = score.toFixed(1);
-      scoreValue.style.color = color;
+    function scoreColor(score) {
+      if (score >= 0.7) return "green";
+      if (score >= 0.3) return "yellow";
+      return "red";
     }
 
-    function showDetails(data) {
-      document.getElementById("detailAction").textContent = data.action || "—";
-      document.getElementById("detailSuccess").textContent = data.success
-        ? "Yes"
-        : "No";
-      document.getElementById("detailTs").textContent = data.challenge_ts
-        ? new Date(data.challenge_ts).toLocaleString()
-        : "—";
-      details.classList.remove("hidden");
+    function addScorePill(action, score) {
+      const emptyLabel = document.getElementById("emptyLabel");
+      if (emptyLabel) emptyLabel.remove();
+
+      const pill = document.createElement("span");
+      pill.className = `score-pill ${scoreColor(score)}`;
+      pill.innerHTML =
+        `<span class="action-name">${action}</span>` +
+        `<span class="score-value">${score.toFixed(1)}</span>`;
+      document.getElementById("scorePills").appendChild(pill);
     }
 
-    function showError(msg) {
-      errorEl.textContent = msg;
-      errorEl.classList.remove("hidden");
+    function showError(id, msg) {
+      const el = document.getElementById(id);
+      el.textContent = msg;
+      el.classList.remove("hidden");
     }
 
-    function setLoading(loading) {
-      loadingEl.classList.toggle("hidden", !loading);
+    function clearError(id) {
+      const el = document.getElementById(id);
+      el.textContent = "";
+      el.classList.add("hidden");
     }
 
-    async function checkScore(siteKey) {
-      errorEl.classList.add("hidden");
-      setLoading(true);
+    function showScreen(screenId) {
+      document.querySelectorAll(".screen").forEach((s) => s.classList.remove("active"));
+      document.getElementById(screenId).classList.add("active");
+    }
+
+    async function executeAction(action) {
+      const token = await grecaptcha.execute(siteKey, { action });
+      const res = await fetch("/api/verify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Verification failed");
+      addScorePill(data.action || action, data.score);
+      return data;
+    }
+
+    async function onGotIt() {
+      const btn = document.getElementById("gotItBtn");
+      btn.disabled = true;
+      btn.textContent = "Checking\u2026";
+      clearError("consentError");
 
       try {
-        const token = await grecaptcha.execute(siteKey, {
-          action: "score_check",
-        });
-
-        const res = await fetch("/api/verify", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ token }),
-        });
-
-        const data = await res.json();
-
-        if (!res.ok) {
-          showError(data.error || "Verification failed");
-          return;
-        }
-
-        setScore(data.score);
-        showDetails(data);
+        await executeAction("consent");
+        showScreen("loginScreen");
       } catch (err) {
-        showError("Something went wrong — check the console for details");
+        showError("consentError", err.message);
         console.error(err);
       } finally {
-        setLoading(false);
+        btn.disabled = false;
+        btn.textContent = "Got it";
+      }
+    }
+
+    async function onLogin(e) {
+      e.preventDefault();
+      const btn = document.getElementById("loginBtn");
+      btn.disabled = true;
+      btn.textContent = "Checking\u2026";
+      clearError("loginError");
+
+      try {
+        await executeAction("login");
+        btn.textContent = "Done!";
+      } catch (err) {
+        showError("loginError", err.message);
+        btn.disabled = false;
+        btn.textContent = "Login";
+        console.error(err);
       }
     }
 
     async function init() {
       try {
         const res = await fetch("/api/config");
-        const { siteKey } = await res.json();
+        const data = await res.json();
+        siteKey = data.siteKey;
 
         if (!siteKey) {
-          showError("Site key not configured on the server");
+          showError("consentError", "Site key not configured on the server");
           return;
         }
 
         const script = document.createElement("script");
         script.src = `https://www.google.com/recaptcha/api.js?render=${siteKey}`;
         script.onload = () => {
-          grecaptcha.ready(() => checkScore(siteKey));
+          grecaptcha.ready(() => executeAction("homepage"));
         };
         document.head.appendChild(script);
       } catch (err) {
-        showError("Failed to load configuration");
+        showError("consentError", "Failed to load configuration");
         console.error(err);
       }
     }
+
+    document.getElementById("gotItBtn").addEventListener("click", onGotIt);
+    document.getElementById("loginForm").addEventListener("submit", onLogin);
 
     init();
   </script>
