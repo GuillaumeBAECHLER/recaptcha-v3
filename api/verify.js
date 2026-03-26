@@ -18,7 +18,15 @@ export default async function handler(req, res) {
   }
 
   try {
-    const params = new URLSearchParams({ secret: secretKey, response: token });
+    const remoteIp =
+      req.headers["x-forwarded-for"]?.split(",")[0]?.trim() ||
+      req.socket?.remoteAddress;
+
+    const params = new URLSearchParams({
+      secret: secretKey,
+      response: token,
+      ...(remoteIp && { remoteip: remoteIp }),
+    });
 
     const response = await fetch(
       "https://www.google.com/recaptcha/api/siteverify",
